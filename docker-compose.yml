@@ -1,4 +1,5 @@
-#serveur backend
+
+
 services:
   wordpress:
     image: wordpress:latest
@@ -14,7 +15,6 @@ services:
     depends_on:
       - db
 
-#base de données
   db:
     image: mysql:5.7
     container_name: mysql
@@ -27,10 +27,21 @@ services:
     ports:
       - 3306:3306
 
+  grafana:
+    build:
+      context: ./grafana  # Le chemin vers ton Dockerfile Grafana
+    container_name: grafana
+    restart: always
+    ports:
+      - 3000:3000  # Expose le port de Grafana
+    depends_on:
+      - db  # Grafana dépend de MySQL si tu veux connecter Grafana à la base de données
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Mot de passe pour l'utilisateur admin de Grafana
+
 volumes:
   db_data:
 
-# Ajout du réseau pour garantir la communication entre les services
 networks:
   default:
     driver: bridge
