@@ -3,16 +3,11 @@ FROM grafana/grafana:latest
 
 EXPOSE 3000
 
-# Si tu souhaites personnaliser Grafana (ajouter des plugins ou des configurations) :
-# Exemples de commandes d'ajout de plugins Grafana
-# RUN grafana-cli plugins install grafana-piechart-panel
-# RUN grafana-cli plugins install grafana-clock-panel
+# Copier le fichier JSON du tableau de bord
+COPY ./dashboard.json /etc/grafana/provisioning/dashboards/
 
-# Si tu as des fichiers de configuration locaux, copie-les dans le conteneur
-# COPY ./conf/grafana.ini /etc/grafana/grafana.ini
+# Copier le fichier de provisioning
+COPY ./dashboard.yaml /etc/grafana/provisioning/dashboards/
 
-# Définir la variable d'environnement si besoin
-# ENV GF_SECURITY_ADMIN_PASSWORD=admin
-
-# Commande par défaut (Grafana démarre automatiquement)
+# Définir la commande de démarrage (Grafana démarre automatiquement)
 CMD [ "/bin/bash", "-c", "/bin/grafana-server -homepath=/usr/share/grafana" ]
